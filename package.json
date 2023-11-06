@@ -1,6 +1,17 @@
 {
+  "name": "domain-pars",
+  "version": "2.1.2",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ./main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "dns": "^0.2.2",
-    "whois": "^2.14.0"
+    "net": "^1.0.2",
+    "whois": "^2.14.0",
+    "dns": "^0.2.2"
   }
 }

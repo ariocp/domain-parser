@@ -1,106 +1,64 @@
-const whois = require('whois')
-const dns = require('dns')
-const net = require("net")
+const whois = require("whois");
+const dns = require("dns");
+const net = require("net");
 
-class PortResult {
-    
-    constructor(domain, result) {
-        this.domain = domain
-        this.result = result
-    }
-}
-
-async function getDnsInfo(domain) {
+const getDomainInfo = async (domain) => {
     return new Promise((resolve, reject) => {
-        dns.resolve(domain, (err, addresses) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(addresses)
-            }
-        })
-    })
-}
+        try {
+            whois.lookup(domain, (error, data) => {
+                if (data) {
+                    resolve(data);
+                } else {
+                    throw new Error(error);
+                }
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 
-async function getDomainInfo(domain) {
+const getDnsInfo = async (domain) => {
     return new Promise((resolve, reject) => {
-        whois.lookup(domain, (err, data) => {
-            if (err) {
-                reject(err)
-            }
-            resolve(data)
-        })
-    })
-}
+        try {
+            dns.lookup(domain, (error, data) => {
+                if (data) {
+                    resolve(data);
+                } else {
+                    throw new Error(error);
+                }
+            });
+        } catch (error) {
+            reject(new Error(error));
+        }
+    });
+};
 
-class PortCheker {
+const checkOpenPorts = async (domain, ports) => {
+    const results = [];
 
-    constructor(maxTimeout = 2000) {
-        this.maxTimeout = maxTimeout
-    }
-    
-    async PortScanner(port, host) {
+    for (const port of ports) {
+        const client = new net.Socket();
 
-        return new Promise((resolve, reject) => {
+        const connectPromise = new Promise((resolve) => {
+            client.connect(port, domain, () => {
+                resolve({ port, isOpen: true });
+            });
 
-            const socket = new net.Socket();
+            client.on('error', () => {
+                resolve({ port, isOpen: false });
+            });
+        });
 
-            socket.connect(port, host);
-
-            socket.setTimeout(this.maxTimeout, () => {
-
-                socket.destroy()
-                resolve("closed: timeout")
-                
-            })
-
-            socket.on("connect", () => {
-
-                socket.destroy()
-                resolve("opened: connected")
-
-            })
-
-            socket.on("timeout", () => {
-
-                socket.destroy()
-                resolve("closed: timeout")
-                
-            })
-
-            socket.on("error", () => {
-
-                socket.destroy()
-                resolve("closed: error")
-                
-            })
-
-        })
-
+        const result = await connectPromise;
+        results.push(result);
     }
 
-}
-
-const ports = [
-    80,
-    21,
-    3000,
-    4000,
-    7070,
-    43,
-    20,
-    22,
-    23,
-    110,
-    119,
-    143,
-    443
-]
+    return results;
+};
 
 module.exports = {
-    PortResult,
-    getDnsInfo,
     getDomainInfo,
-    PortCheker,
-    ports
-}
+    getDnsInfo,
+    checkOpenPorts
+};
