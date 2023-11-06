@@ -1,14 +1,21 @@
 {
-  "name": "domain-pars",
-  "version": "2.1.2",
-  "description": "",
+  "name": "domain-parser",
+  "version": "2.1.0",
+  "description": "This tool helps to find out information about the site",
   "main": "main.js",
   "scripts": {
     "start": "node ./main.js"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ariocp/domain-parser.git"
+  },
+  "author": "ariocp",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ariocp/domain-parser/issues"
+  },
+  "homepage": "https://github.com/ariocp/domain-parser#readme",
   "dependencies": {
     "net": "^1.0.2",
     "whois": "^2.14.0",
