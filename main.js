@@ -1,4 +1,4 @@
-const { getDomainInfo, getDnsInfo, checkOpenPorts } = require("./utils");
+const { getDomainInfo, getNetworkInfo, checkOpenPorts, getSubdomains, getSmtpInfo } = require("./utils");
 
 const domains = [
     "google.com"
@@ -8,9 +8,13 @@ const bootstrap = async () => {
     for (const hostname of domains) {
         try {
             const domainInfo = await getDomainInfo(hostname);
-            const dnsInfo = await getDnsInfo(hostname);
+            const networkInfo = await getNetworkInfo(hostname);
+            const subdomains = await getSubdomains(hostname);
+            const smtpInfo = await getSmtpInfo(hostname);
             console.log(`Domain info: ${domainInfo}`);
-            console.log(`DNS info: ${dnsInfo}`);
+            console.log(`Network info: ${networkInfo}`);
+            console.log(`Subdomains: ${subdomains}`);
+            console.log(`SMTP info: ${JSON.stringify(smtpInfo)}`);
             const portsToCheck = [80, 443];
             const portResults = await checkOpenPorts(hostname, portsToCheck);
             console.log(`Port status for ${hostname}:`);

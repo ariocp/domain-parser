@@ -14,13 +14,38 @@ const getDomainInfo = async (hostname) => {
     });
 };
 
-const getDnsInfo = async (hostname) => {
+const getNetworkInfo = async (hostname) => {
     return new Promise((resolve, reject) => {
         dns.lookup(hostname, (error, data) => {
             if (error) {
                 reject(error);
             } else {
                 resolve(data);
+            }
+        });
+    });
+};
+
+const getSubdomains = async (hostname) => {
+    return new Promise((resolve, reject) => {
+        dns.resolveNs(hostname, (error, addresses) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(addresses);
+            }
+        });
+    });
+};
+
+const getSmtpInfo = async (hostname) => {
+    return new Promise((resolve, reject) => {
+        dns.resolveMx(hostname, (error, addresses) => {
+            if (error) {
+                reject(error);
+            } else {
+                const mailServers = addresses.map((server) => server.exchange);
+                resolve(mailServers);
             }
         });
     });
@@ -47,6 +72,8 @@ const checkOpenPorts = async (hostname, ports) => {
 
 module.exports = {
     getDomainInfo,
-    getDnsInfo,
-    checkOpenPorts
+    getNetworkInfo,
+    checkOpenPorts,
+    getSubdomains,
+    getSmtpInfo
 };
