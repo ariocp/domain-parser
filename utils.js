@@ -36,16 +36,13 @@ const getDnsInfo = async (hostname) => {
 
 const checkOpenPorts = async (hostname, ports) => {
     const results = [];
-
     for (const port of ports) {
         const client = new net.Socket();
-
         const connectPromise = new Promise((resolve, reject) => {
             try {
                 client.connect(port, hostname, () => {
                     resolve({ port, isOpen: true });
                 });
-
                 client.on('error', () => {
                     resolve({ port, isOpen: false });
                 });
@@ -53,7 +50,6 @@ const checkOpenPorts = async (hostname, ports) => {
                 reject(error);
             }
         });
-
         const result = await connectPromise;
         results.push(result);
     }
