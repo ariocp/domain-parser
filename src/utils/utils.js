@@ -2,7 +2,7 @@ const whois = require("whois");
 const dns = require("dns");
 const net = require("net");
 
-const getDomainInfo = async (hostname) => {
+async function getDomainInfo(hostname) {
     return new Promise((resolve, reject) => {
         whois.lookup(hostname, (error, data) => {
             if (error) {
@@ -12,9 +12,9 @@ const getDomainInfo = async (hostname) => {
             }
         });
     });
-};
+}
 
-const getNetworkInfo = async (hostname) => {
+async function getNetworkInfo(hostname) {
     return new Promise((resolve, reject) => {
         dns.lookup(hostname, (error, data) => {
             if (error) {
@@ -24,9 +24,9 @@ const getNetworkInfo = async (hostname) => {
             }
         });
     });
-};
+}
 
-const getSubdomains = async (hostname) => {
+async function getSubdomains(hostname) {
     return new Promise((resolve, reject) => {
         dns.resolveNs(hostname, (error, addresses) => {
             if (error) {
@@ -36,22 +36,21 @@ const getSubdomains = async (hostname) => {
             }
         });
     });
-};
+}
 
-const getSmtpInfo = async (hostname) => {
+async function getSmtpInfo(hostname) {
     return new Promise((resolve, reject) => {
         dns.resolveMx(hostname, (error, addresses) => {
             if (error) {
                 reject(error);
             } else {
-                const mailServers = addresses.map((server) => server.exchange);
-                resolve(mailServers);
+                resolve(addresses);
             }
         });
     });
-};
+}
 
-const checkOpenPorts = async (hostname, ports) => {
+async function checkOpenPorts(hostname, ports) {
     const results = [];
     for (const port of ports) {
         const client = new net.Socket();
@@ -59,7 +58,7 @@ const checkOpenPorts = async (hostname, ports) => {
             client.connect(port, hostname, () => {
                 resolve({ port, isOpen: true });
             });
-            client.on("error", () => {
+            client.on("Error!", () => {
                 resolve({ port, isOpen: false });
             });
         });
@@ -68,7 +67,7 @@ const checkOpenPorts = async (hostname, ports) => {
     }
 
     return results;
-};
+}
 
 module.exports = {
     getDomainInfo,

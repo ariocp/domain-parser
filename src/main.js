@@ -1,4 +1,4 @@
-const { getDomainInfo, getNetworkInfo, checkOpenPorts, getSubdomains, getSmtpInfo } = require("./utils");
+const { getDomainInfo, getNetworkInfo, checkOpenPorts, getSubdomains, getSmtpInfo } = require("./utils/utils");
 
 const domains = [
     "google.com"
@@ -22,7 +22,7 @@ const bootstrap = async () => {
                 console.log(`Port ${result.port}: ${result.isOpen ? "Open" : "Closed"}`);
             });
         } catch (error) {
-            console.error(`Error processing ${hostname}: ${error}`);
+            console.error(`Error! ${hostname}: ${error}`);
         }
     }
 };
