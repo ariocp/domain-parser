@@ -2,7 +2,7 @@ const { getDomainInfo, getNetworkInfo, checkOpenPorts, getSubdomains, getSmtpInf
 
 const domains = [
     "google.com"
-];
+]
 
 const bootstrap = async () => {
     for (const hostname of domains) {
@@ -25,6 +25,6 @@ const bootstrap = async () => {
             console.error(`Error! ${hostname}: ${error}`);
         }
     }
-};
+}
 
 bootstrap();

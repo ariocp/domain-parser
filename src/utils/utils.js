@@ -65,7 +65,6 @@ async function checkOpenPorts(hostname, ports) {
         const result = await connectPromise;
         results.push(result);
     }
-
     return results;
 }
 
@@ -75,4 +74,4 @@ module.exports = {
     checkOpenPorts,
     getSubdomains,
     getSmtpInfo
-};
+}
