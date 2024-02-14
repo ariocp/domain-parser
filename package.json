@@ -1,6 +1,6 @@
 {
   "name": "domain-parser",
-  "version": "2.3.1",
+  "version": "3.3.2",
   "description": "This tool helps to find out information about the site",
   "main": "main.js",
   "scripts": {
